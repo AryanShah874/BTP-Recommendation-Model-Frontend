@@ -16,6 +16,7 @@ import StudentDashboard from './pages/StudentDashboard'
 import ProfessorDashboard from './pages/ProfessorDashboard'
 import ProfessorProfile from './components/ProfessorProfile'
 import Wishlist from './pages/wishlist'
+import Publication from './pages/Publication'
 
 function App() {
   
@@ -36,7 +37,8 @@ function App() {
         <Route path='/admin/addstudent' element={<AddStudent />} />
 
         <Route path='/professor' element={<ProfessorDashboard />} />
-        <Route path='/professor/:id' element={<ProfessorProfile />} />
+        <Route path='/professor/addPublication' element={<Publication />} />  
+        <Route path='/professors/:id' element={<ProfessorProfile />} />
 
         <Route path='/student' element={<StudentDashboard />} />
         <Route path='/student/wishlist' element={<Wishlist />} />

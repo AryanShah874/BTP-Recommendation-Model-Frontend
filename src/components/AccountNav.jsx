@@ -15,8 +15,8 @@ const AccountNav = ({id}) => {
         }
         {id==='professor' && 
           <nav className='absolute left-[50%] translate-x-[-50%]'>
-            <Link to={'/professor'} className='bg-[#FD2A0B] text-white px-4 py-2 rounded-tl-2xl rounded-bl-2xl'>Account</Link>
-            <Link to={'/professor/addPublication'} className='bg-white text-[#FD2A0B] px-4 py-2 rounded-tr-2xl rounded-br-2xl'>Add Publication</Link>
+            <Link to={'/professor'} className={`${location.pathname==='/professor' ? 'bg-[#FD2A0B] text-white' : 'bg-white text-[#FD2A0B]'} px-4 py-2 rounded-tl-2xl rounded-bl-2xl`}>Account</Link>
+            <Link to={'/professor/addPublication'} className={`${location.pathname==='/professor/addPublication' ? 'bg-[#FD2A0B] text-white' : 'bg-white text-[#FD2A0B]'} px-4 py-2 rounded-tr-2xl rounded-br-2xl`}>Add Publication</Link>
           </nav>
         }
         {id==='student' && 

@@ -27,7 +27,7 @@ const Recommender = () => {
           draggable: true,  
           transition: Bounce
         });
-        navigate('/admin');
+        navigate('/');
       }
     }
   }, [user, isLoading]);

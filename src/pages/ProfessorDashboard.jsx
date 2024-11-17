@@ -27,7 +27,7 @@ const ProfessorDashboard = () => {
     if(!user || user?.role!=='professor' && isLoading){
       navigate('/login/professor');
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading]);
 
   //for showing buttons after image is selected
   const handleImageChangeWrapper=(e)=>{ 
