@@ -12,6 +12,7 @@ const Recommender = () => {
   const [top_n, setTop]=useState(3);
   const [data, setData]=useState([]);
 
+
   useEffect(()=>{
     if((!user || user?.role!=='student') && !isLoading){
       if(!user){
@@ -70,6 +71,7 @@ const Recommender = () => {
       });
     }
   }
+  // console.log(data)
   
   return (
     <div className='w-full min-h-[70vh] p-10'>
