@@ -14,8 +14,6 @@ const Publication = () => {
 
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   useEffect(() => {
     if (!isLoading && (!user || user.role !== 'professor')) {
       navigate('/login/professor');
@@ -25,7 +23,7 @@ const Publication = () => {
   const getPublications = async () => { // get all publications of the professor
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication`, {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publications`, {
         method: "GET",
         credentials: "include",
       });
@@ -58,17 +56,13 @@ const Publication = () => {
       <AccountNav id={'professor'} />
 
       <div>
-        <button onClick={()=>setIsModalOpen(true)} className='mb-10 text-red-500 bg-white p-2 px-4 rounded-2xl'>
+        <Link to={'/professor/addPublication/new'} className='text-red-500 bg-white p-2 px-4 rounded-2xl'>
           Add Publication
-        </button>
+        </Link>
 
-        <Modal open={isModalOpen} onClose={()=>setIsModalOpen(false)}>
-          <PublicationForm closeModal={()=>setIsModalOpen(false)} setPublications={setPublications} userId={user?._id} />
-        </Modal>
-
-        {publications.length===0 ? <p className='text-black font-bold'>No publications found</p> : 
+        {publications.length===0 ? <p className='mt-10 text-black font-bold'>No publications found</p> : 
         
-          <div className='overflow-x-auto'>
+          <div className='mt-10 overflow-x-auto'>
             <table className='w-full text-sm text-center text-gray-500'>
               <thead className='text-gray-700 uppercase bg-gray-50'>
                 <tr>
@@ -81,7 +75,7 @@ const Publication = () => {
               <tbody>
                 {publications.map((publication, index) => (
                     <tr key={index} className='bg-gray-300 border-b-2'>
-                      <Link to={`/addPublication/${publication._id}`} className='contents'> 
+                      <Link to={`/professor/addPublication/${publication._id}`} className='contents'> 
                       {/* contents */}
                         <td className='px-6 py-4 whitespace-nowrap'>{publication.year}</td>
                         <td className='px-6 py-4 whitespace-nowrap'>{publication.title}</td>

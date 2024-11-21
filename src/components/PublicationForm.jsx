@@ -1,97 +1,230 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast, Bounce } from 'react-toastify';
 import Loader from './Loader';
+import useAuthContext from '../hooks/useAuthContext';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import PageNotFound from './PageNotFound';
 
-const PublicationForm = ({setPublications, userId}) => {
-  const [formData, setFormData]=useState({title: '', abstract: '', keywords: '', downloadLink: '', year: 0});
+const PublicationForm = () => {
+  const { user, isLoading } = useAuthContext();
 
-  const [loading, setLoading]=useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    abstract: '',
+    keywords: '',
+    downloadLink: '',
+    year: '',
+  });
+  const [initialFormData, setInitialFormData] = useState({
+    title: '',
+    abstract: '',
+    keywords: '',
+    downloadLink: '',
+    year: '',
+  });
 
-  const handleSubmit=async(e)=>{
+  const [isFormChanged, setIsFormChanged] = useState(false);
+
+  const { id } = useParams();
+  
+  const [pageNotFound, setPageNotFound] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && (!user || user?.role !== 'professor')) {
+      navigate('/login/professor');
+    }
+  }, [user, isLoading]);
+
+  useEffect(() => {
+    if(id!=='new'){
+      const getPublication=async()=>{
+        setLoading(true);
+        try{
+          const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication/${id}`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+
+          const data=await res.json();
+
+          if(res.ok){
+            setFormData(data.publication);
+            setInitialFormData(data.publication);
+            setLoading(false);
+          }
+          else{
+            setLoading(false);
+            console.log(data.error);
+            setPageNotFound(true);
+          }
+        }
+        catch(err){
+          console.log(err);
+          setLoading(false);
+          setPageNotFound(true);
+        }
+      };
+
+      getPublication();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    setIsFormChanged(JSON.stringify(formData) !== JSON.stringify(initialFormData));
+  }, [formData, initialFormData]);
+
+  if(pageNotFound){
+    return <PageNotFound />
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    formData.userId=userId;
-    try{
-      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication/add`, {
-        method: 'POST',
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication/${id==='new' ? 'add' : `update/${id}`}`, {
+        method: id === 'new' ? 'POST' : 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if(res.ok){
+        toast.success(data.success, {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,  
+          transition: Bounce
+        });
+
+        setFormData({title: '', abstract: '', keywords: '', downloadLink: '', year: ''});
+        setLoading(false);
+        setRedirect(true);
+      }
+      else{
+        setLoading(false);
+        console.log(data.error);
+        toast.error(data.error, {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,  
+          transition: Bounce
+        });
+      }
+    }
+    catch(err){
+      console.log(err);
+      setLoading(false);
+      toast.error('Internal server error', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,  
+        transition: Bounce
+      });
+    }
+  }
+
+  const handleDelete=async()=>{
+    setLoading(true);
+
+    try{
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication/delete/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
       });
 
       const data=await res.json();
 
       if(res.ok){
         setLoading(false);
-        setPublications(data.publications);
-        setFormData({title: '', abstract: '', keywords: '', downloadLink: '', year: 0});
-        toast.success('Publication added successfully', {
-          position: "top-right",
+        toast.success(data.success, {
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          transition: Bounce,
+          draggable: true,  
+          transition: Bounce
         });
+        setRedirect(true);
       }
       else{
         setLoading(false);
+        console.log(data.error);
         toast.error(data.error, {
-          position: "top-right",
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          transition: Bounce,
+          draggable: true,  
+          transition: Bounce
         });
       }
     }
     catch(err){
+      console.log(err);
+      setLoading(false);
       toast.error('Internal server error', {
-        position: "top-right",
+        position: 'top-center',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        transition: Bounce,
+        draggable: true,  
+        transition: Bounce
       });
-      console.log(err);
-      setLoading(false);
     }
   }
 
-  if(loading){
-    return <Loader />
+  if(redirect){
+    navigate('/professor/addPublication');
   }
 
-  return (
-    <>
-      <form method='POST' onSubmit={handleSubmit} className='flex flex-col gap-4 text-gray-600'>
-        <div className='flex gap-4'>
-          <input className='w-[93vw] p-2 rounded-md' type="text" name='title' value={formData.title} placeholder='Title' onChange={(e)=>setFormData({...formData, title: e.target.value})} />
-          <select className='w-[7vw] p-2 rounded-md' name='year' value={formData.year} onChange={(e)=>setFormData({...formData, year: e.target.value})}>
-            <option value={0}>Year</option>
-            {Array.from(new Array(new Date().getFullYear() - 1999), (v, i) => 2000 + i).map(year => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
-        </div>
-        <textarea className='w-full p-2 rounded-md' name='abstract' value={formData.abstract} placeholder='Abstract' onChange={(e)=>setFormData({...formData, abstract: e.target.value})} rows={8} />
-        <textarea className='w-full p-2 rounded-md' name="keywords" value={formData.keywords} placeholder='Keywords' onChange={(e)=>setFormData({...formData, keywords: e.target.value})} />
-        <input className='w-full p-2 rounded-md' type="text" name='downloadLink' value={formData.downloadLink} placeholder='Download Link' onChange={(e)=>setFormData({...formData, downloadLink: e.target.value})} />
+  if (loading || isLoading) {
+    return <Loader />;
+  }
 
-        <button type='submit' className='bg-red-500 text-white p-2 rounded-md'>{loading ? 'Adding...' : 'Add Publication'}</button>
-      </form>
-    </>
-  )
+  return(
+    <div className='w-full min-h-[70vh] text-white p-10'>
+      <div className='bg-gray-200 mx-auto text-black p-6 rounded-lg shadow-lg w-full max-w-3xl'>
+        <form method='POST' onSubmit={handleSubmit}>
+          <label htmlFor="title">Title: </label>
+          <input type="text" id="title" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className='w-full p-2 my-2 rounded-md' required />
+          <label htmlFor="abstract">Abstract: </label>
+          <textarea id="abstract" name="abstract" value={formData.abstract} onChange={(e) => setFormData({ ...formData, abstract: e.target.value })} className='w-full p-2 my-2' required />
+          <label htmlFor="keywords">Keywords: </label>
+          <input type="text" id="keywords" name="keywords" value={formData.keywords} onChange={(e) => setFormData({ ...formData, keywords: e.target.value })} className='w-full p-2 my-2' required />
+          <label htmlFor="downloadLink">Download Link: </label>
+          <input type="text" id="downloadLink" name="downloadLink" value={formData.downloadLink} onChange={(e) => setFormData({ ...formData, downloadLink: e.target.value })} className='w-full p-2 my-2' required />
+          <label htmlFor="year">Year: </label>
+          <input type="number" id="year" name="year" value={formData.year} onChange={(e) => setFormData({ ...formData, year: e.target.value })} className='w-full p-2 my-2' required />
+
+          <button type='submit' disabled={loading || !isFormChanged} className='w-full bg-red-500 text-white shadow-lg py-2 px-4 rounded mt-6'>{id==='new' ? 'Add Publication' : 'Update'}</button>
+        </form>
+
+        {id!=='new' && <button onClick={handleDelete} disabled={loading} className='w-full bg-red-500 text-white shadow-lg py-2 px-4 rounded mt-6'>Delete</button>}
+
+        <Link to='/professor/addPublication' className='w-full text-red-500 bg-white shadow-lg py-2 px-4 rounded mt-6 block text-center'>Cancel</Link>
+      </div>
+    </div>
+  );
 }
 
 export default PublicationForm

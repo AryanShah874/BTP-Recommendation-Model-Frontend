@@ -12,7 +12,7 @@ const Home = () => {
         <div className='w-[50%] flex flex-col items-start gap-4'>
           <h1 className='inline-block font-bold text-4xl'>BTP Recommendation System</h1>
           <p>
-            The BTP Recommendation System is designed to help students find the best professors and projects for their B.Tech Project (BTP). By analyzing various factors such as professor expertise, student interests, and project requirements, our system provides personalized recommendations to ensure a successful and fulfilling project experience.
+            Our Faculty Recommender System leverages advanced search technologies and machine learning to help users find professors based on their research areas and publications. By analyzing faculty expertise and scholarly work, the system offers personalized recommendations, making it easier to connect with the right mentors, collaborators, or subject experts.
           </p>
           {/* <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque dolor nesciunt doloribus ipsa dignissimos recusandae aliquid. Reiciendis et animi, natus eos quae voluptates perferendis, modi aliquid ratione maxime nesciunt sapiente.</p> */}
         </div>

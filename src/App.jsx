@@ -20,6 +20,7 @@ import Publication from './pages/Publication'
 import PageNotFound from './components/PageNotFound'
 import ProfessorForm from './components/ProfessorForm'
 import StudentForm from './components/StudentForm'
+import PublicationForm from './components/PublicationForm'
 
 function App() {
   
@@ -45,6 +46,8 @@ function App() {
 
         <Route path='/professor' element={<ProfessorDashboard />} />
         <Route path='/professor/addPublication' element={<Publication />} />  
+        <Route path='/professor/addPublication/:id' element={<PublicationForm />} />
+
         <Route path='/professors/:id' element={<ProfessorProfile />} />
 
         <Route path='/student' element={<StudentDashboard />} />
