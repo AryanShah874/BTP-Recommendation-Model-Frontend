@@ -44,16 +44,16 @@ const ProfessorDashboard = () => {
   const handleUpdate=async()=>{
     setLoading(true);
 
+    const updates = {};
+
+    if(imgURL!==initialImgURL){
+      updates.profilePic=imgURL;
+    }
+    if(researchAreas!==initialResearchAreas){
+      updates.researchAreas=researchAreas;
+    }
+
     try{
-      const updates={userId: user._id};
-
-      if(imgURL!==initialImgURL){
-        updates.profilePic=imgURL;
-      }
-      if(researchAreas!==initialResearchAreas){
-        updates.researchAreas=researchAreas;
-      }
-
       const res=await fetch('/api/professor/update', {
         method: 'PATCH',
         headers: {
@@ -172,12 +172,14 @@ const ProfessorDashboard = () => {
     }
   }
 
-  if((isLoading || loading) && !redirect){
-    return <Loader />
-  }
+  useEffect(()=>{
+    if(redirect){
+      navigate('/');
+    }
+  }, [redirect, navigate]);
 
-  if(redirect){
-    navigate('/');
+  if(isLoading || loading){
+    return <Loader />
   }
 
   return (

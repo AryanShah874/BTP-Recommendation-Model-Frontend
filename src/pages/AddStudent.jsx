@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AccountNav from '../components/AccountNav'
 import useAuthContext from '../hooks/useAuthContext';
 import Loader from '../components/Loader';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
 import StudentForm from '../components/StudentForm';
 
@@ -12,12 +12,10 @@ const AddStudent = () => {
   const navigate=useNavigate();
 
   useEffect(()=>{
-    if((!user || user?.role!=='admin') && !isLoading){
+    if(!isLoading && (!user || user?.role!=='admin')){
       navigate('/login/admin');
     }
   }, [user, isLoading])
-
-  const [isModalOpen, setIsModalOpen]=useState(false);
 
   const [students, setStudents]=useState([]);
   const [loading, setLoading]=useState(false);
@@ -51,32 +49,28 @@ const AddStudent = () => {
     getStudents();
   }, [])
 
-  if(isLoading){
+  if(isLoading || loading){
     return <Loader />
   }
 
   return (
     <div className='w-full min-h-[70vh] text-center text-white p-10'>
-      <AccountNav id={'admin'} />
+      <AccountNav id={user?.role} />
 
       <div>
-        <button onClick={()=>setIsModalOpen(true)} className='mb-10 text-red-500 bg-white p-2 px-4 rounded-2xl'>
+        <Link to={'/admin/addstudent/new'} className='text-red-500 bg-white p-2 px-4 rounded-2xl'>
           Add Student
-        </button>
+        </Link>
 
-        <Modal open={isModalOpen} onClose={()=>setIsModalOpen(false)}>
-          <StudentForm setStudents={setStudents} />
-        </Modal>
-
-        {students.length===0 ? <p className='text-black font-bold'>No students found</p> :
+        {students.length===0 ? <p className='mt-10 text-black font-bold'>No students found</p> :
         
-        <div className='overflow-x-auto'>
+        <div className='overflow-x-auto mt-10'>
           <table className='w-full text-sm text-center text-gray-500'>
             <thead className='text-gray-700 uppercase bg-gray-50'>
               <tr>
                 <th scope='col' className='px-6 py-3'>Name</th>
                 <th scope='col' className='px-6 py-3'>Email</th>
-                <th scope='col' className='px-6 py-3'>Roll</th>
+                <th scope='col' className='px-6 py-3'>Roll No.</th>
                 <th scope='col' className='px-6 py-3'>Department</th>
               </tr>
             </thead>
@@ -85,10 +79,12 @@ const AddStudent = () => {
             <tbody>
               {students.map((student, idx)=>(
                 <tr key={idx} className={'bg-gray-300 border-b-2'}>
-                  <td className='px-6 py-4 whitespace-nowrap'>{student.name.firstName} {student.name.lastName}</td>
-                  <td className='px-6 py-4 whitespace-nowrap'>{student.email}</td>
-                  <td className='px-6 py-4 whitespace-nowrap'>{student.roll}</td>
-                  <td className='px-6 py-4 whitespace-nowrap'>{student.department}</td>
+                  <Link to={`/admin/addstudent/${student._id}`} className='contents'>
+                    <td className='px-6 py-4 whitespace-nowrap'>{student.name.firstName} {student.name.lastName}</td>
+                    <td className='px-6 py-4 whitespace-nowrap'>{student.email}</td>
+                    <td className='px-6 py-4 whitespace-nowrap'>{student.roll}</td>
+                    <td className='px-6 py-4 whitespace-nowrap'>{student.department}</td>
+                  </Link>
                 </tr>
               ))}
             </tbody>

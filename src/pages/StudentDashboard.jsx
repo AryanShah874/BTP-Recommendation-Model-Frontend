@@ -20,6 +20,7 @@ const StudentDashboard = () => {
   }, [user, isLoading, navigate]);
 
   const handleClick=async()=>{
+    setLoading(true);
     try{
       const res=await fetch('/api/logout', {
         method: 'GET',
@@ -70,13 +71,16 @@ const StudentDashboard = () => {
     }
   }
 
-  if((isLoading || loading) && !redirect){
+  useEffect(() => {
+    if (redirect) {
+      navigate('/');
+    }
+  }, [redirect, navigate]);
+
+  if(isLoading || loading){
     return <Loader />
   }
 
-  if(redirect){
-    navigate('/');
-  }
 
   return (
     <div className='w-full min-h-[70vh] text-center text-white p-10'>
@@ -104,7 +108,7 @@ const StudentDashboard = () => {
         </div>
       </div>
 
-      <button onClick={handleClick} className='mt-4 border-2 px-4 py-2 rounded-lg'>Logout</button>
+      <button disabled={loading} onClick={handleClick} className='mt-4 border-2 px-4 py-2 rounded-lg'>Logout</button>
     </div>
   )
 }

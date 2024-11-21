@@ -1,7 +1,7 @@
 import './App.css'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
-import About from './pages/About'
+// import About from './pages/About'
 import Contact from './pages/Contact'
 import Home from './pages/Home'
 import Professors from './pages/Professors'
@@ -17,6 +17,9 @@ import ProfessorDashboard from './pages/ProfessorDashboard'
 import ProfessorProfile from './components/ProfessorProfile'
 import Wishlist from './pages/wishlist'
 import Publication from './pages/Publication'
+import PageNotFound from './components/PageNotFound'
+import ProfessorForm from './components/ProfessorForm'
+import StudentForm from './components/StudentForm'
 
 function App() {
   
@@ -34,7 +37,11 @@ function App() {
 
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path='/admin/addprofessor' element={<AddProfessor />} />
+        {/* <Route path='/admin/addprofessor/new' element={<ProfessorForm />} /> */}
+        <Route path='/admin/addprofessor/:id' element={<ProfessorForm />} />
         <Route path='/admin/addstudent' element={<AddStudent />} />
+        {/* <Route path='/admin/addstudent/new' element={<StudentForm />} /> */}
+        <Route path='/admin/addstudent/:id' element={<StudentForm />} />
 
         <Route path='/professor' element={<ProfessorDashboard />} />
         <Route path='/professor/addPublication' element={<Publication />} />  
@@ -43,6 +50,8 @@ function App() {
         <Route path='/student' element={<StudentDashboard />} />
         <Route path='/student/wishlist' element={<Wishlist />} />
 
+        {/* page not found */}
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
       <Footer />
     </div>

@@ -17,7 +17,7 @@ const Publication = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!user || user.role !== 'professor' && !isLoading) {
+    if (!isLoading && (!user || user.role !== 'professor')) {
       navigate('/login/professor');
     }
   }, [user, isLoading]);
@@ -26,12 +26,8 @@ const Publication = () => {
     setLoading(true);
     try {
       const res = await fetch("/api/professor/publication", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // credentials: 'include',
-        body: JSON.stringify({ userId: user?._id }),
+        method: "GET",
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -53,7 +49,7 @@ const Publication = () => {
     getPublications();
   }, []);
 
-  if (loading) {
+  if (loading || isLoading) {
     return <Loader />
   }
 
@@ -85,7 +81,7 @@ const Publication = () => {
               <tbody>
                 {publications.map((publication, index) => (
                     <tr key={index} className='bg-gray-300 border-b-2'>
-                      <Link to={`/addPublication/${index}`} className='contents'> 
+                      <Link to={`/addPublication/${publication._id}`} className='contents'> 
                       {/* contents */}
                         <td className='px-6 py-4 whitespace-nowrap'>{publication.year}</td>
                         <td className='px-6 py-4 whitespace-nowrap'>{publication.title}</td>

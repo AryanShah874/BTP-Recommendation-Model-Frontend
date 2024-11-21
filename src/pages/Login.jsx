@@ -5,6 +5,7 @@ import useAuthContext from '../hooks/useAuthContext';
 import Loader from '../components/Loader';
 import { OpenEyeIcon } from '../components/Icons';
 import { CloseEyeIcon } from '../components/Icons';
+import PageNotFound from '../components/PageNotFound';
 
 const Login = () => {
   const {id}=useParams();
@@ -15,6 +16,7 @@ const Login = () => {
   const [loading, setLoading]=useState(false);
   const [redirect, setRedirect]=useState(false);
   const [showPassword, setShowPassword]=useState(false);
+  const [pageNotFound, setPageNotFound]=useState(false);
 
   const {user, dispatch}=useAuthContext();
 
@@ -25,6 +27,16 @@ const Login = () => {
       navigate(`/${user.role}`);
     }
   }, [user, navigate, redirect]);
+
+  useEffect(()=>{
+    if(!['admin', 'professor', 'student'].includes(id)){
+      setPageNotFound(true);
+    }
+  }, [id]);
+
+  if(pageNotFound){
+    return <PageNotFound />
+  }
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
@@ -55,6 +67,7 @@ const Login = () => {
           draggable: true,  
           transition: Bounce
         });
+        
         setRedirect(true);
       }
       else{
@@ -84,14 +97,15 @@ const Login = () => {
       });
     }
   }
-
-  if(loading && !redirect){
-    return <Loader />
-  }
-
+  
   if(redirect){
     return navigate(`/${user.role}`);
   }
+
+  if(loading){
+    return <Loader />
+  }
+
 
   return (
     <div className='w-full min-h-[70vh] flex flex-col justify-center items-center text-black'>
@@ -100,10 +114,10 @@ const Login = () => {
       <div className='mt-10 w-[30%] text-center'>
         <form method='POST' onSubmit={handleSubmit} className='space-y-6'>
           <div className='mt-2'>
-            <input className='px-4 py-2 w-full rounded-lg' placeholder='email@gmail.com' type="email" id='email' name='email' value={email} onChange={(e)=>setEmail(e.target.value)} required autoComplete='email' />
+            <input className='px-4 py-2 w-full rounded-lg' placeholder='email@gmail.com' type="email" id='email' name='email' value={email} onChange={(e)=>setEmail(e.target.value)} pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$' required autoComplete='email' />
           </div>
           <div className='mt-2 relative'>
-            <input className='px-4 py-2 w-full rounded-lg' placeholder='password' type={showPassword ? 'text' : 'password'} id='password' name='password' value={password} onChange={(e)=>setPassword(e.target.value)} required autoComplete='current-password' />
+            <input className='px-4 py-2 w-full rounded-lg' placeholder='password' type={showPassword ? 'text' : 'password'} id='password' name='password' value={password} onChange={(e)=>setPassword(e.target.value)} required autoComplete='current-password' minLength={6} />
             {showPassword ? <OpenEyeIcon onClick={()=>setShowPassword(false)} className='!w-6 !h-6 absolute right-2 top-2 cursor-pointer' /> : <CloseEyeIcon onClick={()=>setShowPassword(true)} className='!w-6 !h-6 absolute right-2 top-2 cursor-pointer' />}
           </div>
 

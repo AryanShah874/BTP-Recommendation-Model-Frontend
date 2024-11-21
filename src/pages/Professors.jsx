@@ -20,11 +20,11 @@ const Professors = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if(!user || user?.role!=='student' && isLoading){
-      <Loader />
-    }
-  }, [user, isLoading])
+  // useEffect(() => {
+  //   if(!user || user?.role!=='student' && isLoading){
+  //     <Loader />
+  //   }
+  // }, [user, isLoading])
 
   const toggleWishlist=async (professorId)=>{
     // setWishlist((prev)=>(
@@ -42,7 +42,7 @@ const Professors = () => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({wishlist: updatedWishlist, userId: user._id}),
+        body: JSON.stringify({wishlist: updatedWishlist, userId: user?._id}),
       });
 
       const data=await res.json();
@@ -59,8 +59,6 @@ const Professors = () => {
       )
     }
   };
-
-
 
   const getProfessors = async () => {
     setLoading(true);
@@ -94,10 +92,10 @@ const Professors = () => {
   const handleSearch=()=>{
     return professors.filter(professor => {
       if(searchName && departmentFilter){
-        return professor.name.firstName.toLowerCase().includes(searchName.toLowerCase()) && professor.department===departmentFilter;
+        return professor?.name?.firstName.toLowerCase().includes(searchName.toLowerCase()) && professor.department===departmentFilter;
       }
       else if(searchName){
-        return professor.name.firstName.toLowerCase().includes(searchName.toLowerCase());
+        return professor?.name?.firstName.toLowerCase().includes(searchName.toLowerCase());
       }
       else if(departmentFilter){
         return professor.department===departmentFilter;
@@ -108,7 +106,7 @@ const Professors = () => {
     })
   }
 
-  if(loading){
+  if(loading || isLoading){
     return <Loader />
   }
 

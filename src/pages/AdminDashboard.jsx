@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const navigate=useNavigate();
 
   useEffect(()=>{
-    if(!user && user?.role!=='admin' && !isLoading && !redirect){
+    if(!isLoading && (!user || user?.role!=='admin')){
       navigate('/login/admin');
     }
   }, [user, isLoading, redirect]);
@@ -70,22 +70,25 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   }
+  
+  useEffect(()=>{
+    if(redirect){
+      navigate('/');
+    }
+  }, [redirect, navigate]);
 
-  if((isLoading || loading) && !redirect){
+  if(isLoading || loading){
     return <Loader />
   }
 
-  if(redirect){
-    navigate('/');
-  }
 
   return (
     <div className='w-full min-h-[70vh] text-center text-white p-10'>
-      <AccountNav id={'admin'} />
+      <AccountNav id={user?.role} />
 
       <p>Signed in as {user?.email}</p>
 
-      <button onClick={handleClick} className='mt-4 border-2 px-4 py-2 rounded-lg'>Logout</button>
+      <button disabled={loading} onClick={handleClick} className='mt-4 border-2 px-4 py-2 rounded-lg'>Logout</button>
     </div>
   )
 }
