@@ -12,7 +12,7 @@ const PublicationForm = ({setPublications, userId}) => {
     setLoading(true);
     formData.userId=userId;
     try{
-      const res=await fetch('/api/professor/publication/add', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/publication/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -54,7 +54,7 @@ const ProfessorDashboard = () => {
     }
 
     try{
-      const res=await fetch('/api/professor/update', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/update`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ const ProfessorDashboard = () => {
     setLoading(true);
 
     try{
-      const res=await fetch('/api/logout', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/logout`, {
         method: 'GET',
         credentials: 'include',
       });

@@ -22,7 +22,7 @@ const AdminDashboard = () => {
   const handleClick=async()=>{
     setLoading(true);
     try{
-      const res=await fetch('/api/logout', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/logout`, {
         method: 'GET',
         credentials: 'include',
       });

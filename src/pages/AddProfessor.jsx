@@ -25,7 +25,7 @@ const AddProfessor = () => {
   const getProfessors = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/professor/all", {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/all`, {
         method: "GET",
         // credentials: 'include',
       });

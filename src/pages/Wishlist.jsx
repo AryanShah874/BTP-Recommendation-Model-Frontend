@@ -21,7 +21,7 @@ const Wishlist = () => {
   const getProfessors=async ()=>{
     setLoading(true);
     try{
-      const res = await fetch("/api/student/wishlist", {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/student/wishlist`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

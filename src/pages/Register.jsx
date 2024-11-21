@@ -17,7 +17,7 @@ const Register = () => {
     setLoading(true);
   
     try{
-      const res=await fetch('/api/admin/register', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/admin/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

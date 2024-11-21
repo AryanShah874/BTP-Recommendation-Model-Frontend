@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
   const getUserDetails = async () => {
     setIsLoading(true);
     try{
-      const res=await fetch('/api/user', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/user`, {
         method: 'GET',
         credentials: 'include',
       });

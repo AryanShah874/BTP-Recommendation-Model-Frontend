@@ -16,7 +16,7 @@ const ProfessorProfile = () => {
     setLoading(true);
 
     try{
-      const res=await fetch(`/api/professor/${id}`, {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/professor/${id}`, {
         method: 'GET',
       });
 

@@ -43,7 +43,7 @@ const StudentForm = ({setStudents}) => {
       const getStudent=async()=>{
         setLoading(true);
         try{
-          const res=await fetch(`/api/student/${id}`, {
+          const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/student/${id}`, {
             method: 'GET',
             credentials: 'include',
           });
@@ -93,7 +93,7 @@ const StudentForm = ({setStudents}) => {
     setLoading(true);
 
     try{
-      const res=await fetch(`/api/student/${id==='new' ? 'register' : `update/${id}`}`, {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/student/${id==='new' ? 'register' : `update/${id}`}`, {
         method: id==='new' ? 'POST' : 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ const StudentForm = ({setStudents}) => {
     setLoading(true);
 
     try{
-      const res=await fetch(`/api/student/delete/${id}`, {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/student/delete/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

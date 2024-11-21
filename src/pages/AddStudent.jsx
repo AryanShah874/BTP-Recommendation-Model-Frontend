@@ -23,7 +23,7 @@ const AddStudent = () => {
   const getStudents=async()=>{
     setLoading(true);
     try{
-      const res=await fetch('/api/student/all', {
+      const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/student/all`, {
         method: 'GET',
         credentials: 'include',
       });
