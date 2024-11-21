@@ -114,7 +114,7 @@ const Login = () => {
       <div className='mt-10 w-[30%] text-center'>
         <form method='POST' onSubmit={handleSubmit} className='space-y-6'>
           <div className='mt-2'>
-            <input className='px-4 py-2 w-full rounded-lg' placeholder='email@gmail.com' type="email" id='email' name='email' value={email} onChange={(e)=>setEmail(e.target.value)} pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$' required autoComplete='email' />
+            <input className='px-4 py-2 w-full rounded-lg' placeholder='email@gmail.com' type="email" id='email' name='email' value={email} onChange={(e)=>setEmail(e.target.value)} required autoComplete='email' />
           </div>
           <div className='mt-2 relative'>
             <input className='px-4 py-2 w-full rounded-lg' placeholder='password' type={showPassword ? 'text' : 'password'} id='password' name='password' value={password} onChange={(e)=>setPassword(e.target.value)} required autoComplete='current-password' minLength={6} />
