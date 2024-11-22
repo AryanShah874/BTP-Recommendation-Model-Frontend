@@ -155,8 +155,8 @@ const Recommender = () => {
               (wishlist.includes(professor._id) ? <StarIcon onClick={()=>toggleWishlist(professor._id)} className={'absolute top-2 right-2 z-10 fill-yellow-400'} /> : <StarIcon onClick={()=>toggleWishlist(professor._id)} className={'absolute top-2 right-2 z-10 fill-white'} />)
             }
 
-            <Link to={`/professors/${professor._id}`} className='bg-white p-2 overflow-clip flex gap-4 rounded-lg shadow-1 hover:shadow-3 duration-300'>
-              <img src={professor.profilePic} alt={professor._id} className='w-[10vw] h-full' />
+            <Link to={`/professors/${professor._id}`} className='bg-white p-2 flex gap-4 rounded-lg shadow-1 hover:shadow-3 duration-300'>
+              <img src={professor.profilePic} alt={professor._id} className='w-28 h-28' />
               <div className='flex flex-col justify-center gap-1'>
                 <h1>{professor.name.firstName} {professor.name.lastName}</h1>
                 <p>Email: {professor.email}</p>
