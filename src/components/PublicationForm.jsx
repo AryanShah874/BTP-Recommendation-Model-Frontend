@@ -16,14 +16,15 @@ const PublicationForm = () => {
     abstract: '',
     keywords: '',
     downloadLink: '',
-    year: '',
+    year: 0,
   });
+  
   const [initialFormData, setInitialFormData] = useState({
     title: '',
     abstract: '',
     keywords: '',
     downloadLink: '',
-    year: '',
+    year: 0,
   });
 
   const [isFormChanged, setIsFormChanged] = useState(false);
@@ -106,7 +107,7 @@ const PublicationForm = () => {
           draggable: true,  
           transition: Bounce
         });
-
+        console.log(data);
         setFormData({title: '', abstract: '', keywords: '', downloadLink: '', year: ''});
         setLoading(false);
         setRedirect(true);
